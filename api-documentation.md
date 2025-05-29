@@ -26,29 +26,35 @@ Fetch homepage data including featured products, banners, and promotional conten
 
 ```json
 {
-  "featured_products": [
+  "featuredProducts": [
     {
       "id": 1,
       "name": "iPhone 14 Pro",
       "price": 15000000,
-      "image_url": "https://example.com/images/iphone14.jpg",
+      "imageUrl": "https://example.com/images/iphone14.jpg",
       "rating": 4.8,
-      "slug": "iphone-14-pro"
+      "slug": "iphone-14-pro",
+      "createdAt": "2024-01-15T10:30:00Z",
+      "updatedAt": "2024-01-15T10:30:00Z"
     }
   ],
   "banners": [
     {
       "id": 1,
       "title": "Year End Sale",
-      "image_url": "https://example.com/banners/sale.jpg",
-      "link_url": "/products?category=electronics"
+      "imageUrl": "https://example.com/banners/sale.jpg",
+      "linkUrl": "/products?category=electronics",
+      "createdAt": "2024-01-10T09:00:00Z",
+      "updatedAt": "2024-01-10T09:00:00Z"
     }
   ],
   "categories": [
     {
       "id": 1,
       "name": "Electronics",
-      "product_count": 1250
+      "productCount": 1250,
+      "createdAt": "2024-01-01T08:00:00Z",
+      "updatedAt": "2024-01-01T08:00:00Z"
     }
   ]
 }
@@ -67,9 +73,9 @@ List all products with pagination, filtering, and sorting options. Available to 
 - `limit` (optional): Items per page (default: 20, max: 100)
 - `category` (optional): Category ID to filter by
 - `search` (optional): Search term for product name/description
-- `min_price` (optional): Minimum price filter
-- `max_price` (optional): Maximum price filter
-- `sort` (optional): Sort by (price_asc, price_desc, rating, newest)
+- `minPrice` (optional): Minimum price filter
+- `maxPrice` (optional): Maximum price filter
+- `sort` (optional): Sort by (priceAsc, priceDesc, rating, newest)
 
 **Response Body**  
 **(200 - Success)**
@@ -82,23 +88,25 @@ List all products with pagination, filtering, and sorting options. Available to 
       "name": "iPhone 14 Pro",
       "description": "Latest iPhone with A16 Bionic chip",
       "price": 15000000,
-      "stock_quantity": 50,
+      "stockQuantity": 50,
       "images": ["https://example.com/images/iphone1.jpg"],
       "rating": 4.8,
-      "review_count": 124,
+      "reviewCount": 124,
       "slug": "iphone-14-pro",
       "seller": {
         "id": 2,
-        "first_name": "John",
-        "last_name": "Doe"
-      }
+        "firstName": "John",
+        "lastName": "Doe"
+      },
+      "createdAt": "2024-01-15T10:30:00Z",
+      "updatedAt": "2024-01-15T10:30:00Z"
     }
   ],
   "pagination": {
-    "current_page": 1,
-    "total_pages": 25,
-    "total_items": 500,
-    "items_per_page": 20
+    "currentPage": 1,
+    "totalPages": 25,
+    "totalItems": 500,
+    "itemsPerPage": 20
   }
 }
 ```
@@ -123,7 +131,7 @@ Get detailed information about a specific product by its ID, including reviews a
   "description": "Latest iPhone with A16 Bionic chip and amazing camera",
   "price": 15000000,
   "sku": "IPH14PRO128",
-  "stock_quantity": 50,
+  "stockQuantity": 50,
   "weight": 0.206,
   "dimensions": "147.5 x 71.5 x 7.85 mm",
   "images": ["https://example.com/images/iphone1.jpg"],
@@ -131,8 +139,8 @@ Get detailed information about a specific product by its ID, including reviews a
   "status": "active",
   "seller": {
     "id": 2,
-    "first_name": "John",
-    "last_name": "Doe"
+    "firstName": "John",
+    "lastName": "Doe"
   },
   "categories": [
     {
@@ -141,15 +149,17 @@ Get detailed information about a specific product by its ID, including reviews a
     }
   ],
   "rating": 4.8,
-  "review_count": 124,
-  "related_products": [
+  "reviewCount": 124,
+  "relatedProducts": [
     {
       "id": 2,
       "name": "iPhone 14",
       "price": 12000000,
-      "image_url": "https://example.com/images/iphone14.jpg"
+      "imageUrl": "https://example.com/images/iphone14.jpg"
     }
-  ]
+  ],
+  "createdAt": "2024-01-15T10:30:00Z",
+  "updatedAt": "2024-01-15T10:30:00Z"
 }
 ```
 
@@ -178,17 +188,19 @@ List all product categories including parent-child relationships for navigation 
       "id": 1,
       "name": "Electronics",
       "description": "Electronic devices and gadgets",
-      "parent_id": null,
-      "product_count": 1250,
+      "parentId": null,
+      "productCount": 1250,
       "children": [
         {
           "id": 2,
           "name": "Smartphones",
           "description": "Mobile phones and accessories",
-          "parent_id": 1,
-          "product_count": 350
+          "parentId": 1,
+          "productCount": 350
         }
-      ]
+      ],
+      "createdAt": "2024-01-01T08:00:00Z",
+      "updatedAt": "2024-01-01T08:00:00Z"
     }
   ]
 }
@@ -212,12 +224,12 @@ Get detailed information about a specific category and its products.
   "id": 1,
   "name": "Electronics",
   "description": "Electronic devices and gadgets",
-  "parent_id": null,
+  "parentId": null,
   "children": [
     {
       "id": 2,
       "name": "Smartphones",
-      "product_count": 350
+      "productCount": 350
     }
   ],
   "products": [
@@ -225,10 +237,12 @@ Get detailed information about a specific category and its products.
       "id": 1,
       "name": "iPhone 14 Pro",
       "price": 15000000,
-      "image_url": "https://example.com/images/iphone1.jpg",
+      "imageUrl": "https://example.com/images/iphone1.jpg",
       "rating": 4.8
     }
-  ]
+  ],
+  "createdAt": "2024-01-01T08:00:00Z",
+  "updatedAt": "2024-01-01T08:00:00Z"
 }
 ```
 
@@ -255,8 +269,8 @@ Register a new user account with email and password.
 {
   "email": "john.doe@example.com",
   "password": "securePassword123",
-  "first_name": "John",
-  "last_name": "Doe",
+  "firstName": "John",
+  "lastName": "Doe",
   "phone": "+6281234567890",
   "role": "buyer"
 }
@@ -270,16 +284,18 @@ Register a new user account with email and password.
   "user": {
     "id": 1,
     "email": "john.doe@example.com",
-    "first_name": "John",
-    "last_name": "Doe",
+    "firstName": "John",
+    "lastName": "Doe",
     "phone": "+6281234567890",
     "role": "buyer",
-    "status": "active"
+    "status": "active",
+    "createdAt": "2024-01-15T10:30:00Z",
+    "updatedAt": "2024-01-15T10:30:00Z"
   },
   "tokens": {
-    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "expires_in": 3600
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "expiresIn": 3600
   }
 }
 ```
@@ -322,15 +338,17 @@ Authenticate user with email and password to get access tokens.
   "user": {
     "id": 1,
     "email": "john.doe@example.com",
-    "first_name": "John",
-    "last_name": "Doe",
+    "firstName": "John",
+    "lastName": "Doe",
     "role": "buyer",
-    "status": "active"
+    "status": "active",
+    "createdAt": "2024-01-15T10:30:00Z",
+    "updatedAt": "2024-01-15T10:30:00Z"
   },
   "tokens": {
-    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "expires_in": 3600
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "expiresIn": 3600
   }
 }
 ```
@@ -362,7 +380,7 @@ Authenticate or register user using Google OAuth2 token.
 
 ```json
 {
-  "google_token": "ya29.a0AfH6SMC7..."
+  "googleToken": "ya29.a0AfH6SMC7..."
 }
 ```
 
@@ -374,15 +392,17 @@ Authenticate or register user using Google OAuth2 token.
   "user": {
     "id": 1,
     "email": "john.doe@gmail.com",
-    "first_name": "John",
-    "last_name": "Doe",
+    "firstName": "John",
+    "lastName": "Doe",
     "role": "buyer",
-    "status": "active"
+    "status": "active",
+    "createdAt": "2024-01-15T10:30:00Z",
+    "updatedAt": "2024-01-15T10:30:00Z"
   },
   "tokens": {
-    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "expires_in": 3600
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "expiresIn": 3600
   }
 }
 ```
@@ -406,7 +426,7 @@ Refresh access token using refresh token.
 
 ```json
 {
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
 
@@ -415,9 +435,9 @@ Refresh access token using refresh token.
 
 ```json
 {
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "expires_in": 3600
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "expiresIn": 3600
 }
 ```
 
@@ -448,7 +468,7 @@ Revoke refresh token and log out user from the system.
 
 ```json
 {
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
 
@@ -491,14 +511,14 @@ Get current authenticated user's profile information.
 {
   "id": 1,
   "email": "john.doe@example.com",
-  "first_name": "John",
-  "last_name": "Doe",
+  "firstName": "John",
+  "lastName": "Doe",
   "phone": "+6281234567890",
   "role": "buyer",
   "status": "active",
-  "seller_profile": null,
-  "created_at": "2024-01-15T10:30:00Z",
-  "updated_at": "2024-01-15T10:30:00Z"
+  "sellerProfile": null,
+  "createdAt": "2024-01-15T10:30:00Z",
+  "updatedAt": "2024-01-15T10:30:00Z"
 }
 ```
 
@@ -529,8 +549,8 @@ Update current authenticated user's profile information.
 
 ```json
 {
-  "first_name": "John",
-  "last_name": "Smith",
+  "firstName": "John",
+  "lastName": "Smith",
   "phone": "+6281234567891"
 }
 ```
@@ -542,12 +562,12 @@ Update current authenticated user's profile information.
 {
   "id": 1,
   "email": "john.doe@example.com",
-  "first_name": "John",
-  "last_name": "Smith",
+  "firstName": "John",
+  "lastName": "Smith",
   "phone": "+6281234567891",
   "role": "buyer",
   "status": "active",
-  "updated_at": "2024-01-15T11:30:00Z"
+  "updatedAt": "2024-01-15T11:30:00Z"
 }
 ```
 
@@ -598,15 +618,15 @@ Get any user's profile by ID. Only accessible by admin users.
 {
   "id": 2,
   "email": "jane.doe@example.com",
-  "first_name": "Jane",
-  "last_name": "Doe",
+  "firstName": "Jane",
+  "lastName": "Doe",
   "phone": "+6281234567892",
   "role": "seller",
   "status": "active",
-  "seller_profile": {
+  "sellerProfile": {
     "balance": 2500000
   },
-  "created_at": "2024-01-10T09:15:00Z"
+  "createdAt": "2024-01-10T09:15:00Z"
 }
 ```
 
@@ -664,9 +684,9 @@ List all addresses for the current authenticated user.
       "street2": "Apt 4B",
       "city": "Jakarta",
       "province": "DKI Jakarta",
-      "postal_code": "12345",
+      "postalCode": "12345",
       "country": "Indonesia",
-      "created_at": "2024-01-15T10:30:00Z"
+      "createdAt": "2024-01-15T10:30:00Z"
     },
     {
       "id": 2,
@@ -675,9 +695,9 @@ List all addresses for the current authenticated user.
       "street2": null,
       "city": "Jakarta",
       "province": "DKI Jakarta",
-      "postal_code": "12346",
+      "postalCode": "12346",
       "country": "Indonesia",
-      "created_at": "2024-01-16T14:20:00Z"
+      "createdAt": "2024-01-16T14:20:00Z"
     }
   ]
 }
@@ -715,7 +735,7 @@ Create a new address for the current authenticated user.
   "street2": "Building C, Floor 5",
   "city": "Jakarta",
   "province": "DKI Jakarta",
-  "postal_code": "12347",
+  "postalCode": "12347",
   "country": "Indonesia"
 }
 ```
@@ -731,9 +751,9 @@ Create a new address for the current authenticated user.
   "street2": "Building C, Floor 5",
   "city": "Jakarta",
   "province": "DKI Jakarta",
-  "postal_code": "12347",
+  "postalCode": "12347",
   "country": "Indonesia",
-  "created_at": "2024-01-17T09:45:00Z"
+  "createdAt": "2024-01-17T09:45:00Z"
 }
 ```
 
@@ -788,9 +808,9 @@ Get a specific address by ID. User can only access their own addresses.
   "street2": "Apt 4B",
   "city": "Jakarta",
   "province": "DKI Jakarta",
-  "postal_code": "12345",
+  "postalCode": "12345",
   "country": "Indonesia",
-  "created_at": "2024-01-15T10:30:00Z"
+  "createdAt": "2024-01-15T10:30:00Z"
 }
 ```
 
@@ -844,7 +864,7 @@ Update a specific address. User can only update their own addresses.
   "street2": "Apt 4C",
   "city": "Jakarta",
   "province": "DKI Jakarta",
-  "postal_code": "12345",
+  "postalCode": "12345",
   "country": "Indonesia"
 }
 ```
@@ -860,9 +880,9 @@ Update a specific address. User can only update their own addresses.
   "street2": "Apt 4C",
   "city": "Jakarta",
   "province": "DKI Jakarta",
-  "postal_code": "12345",
+  "postalCode": "12345",
   "country": "Indonesia",
-  "updated_at": "2024-01-17T11:20:00Z"
+  "updatedAt": "2024-01-17T11:20:00Z"
 }
 ```
 
@@ -873,7 +893,7 @@ Update a specific address. User can only update their own addresses.
   "message": "Validation failed",
   "errors": [
     {
-      "field": "postal_code",
+      "field": "postalCode",
       "message": "Postal code is required"
     }
   ]
@@ -991,14 +1011,14 @@ List products for authenticated users. For sellers, shows their own products. Fo
       "description": "Latest iPhone with A16 Bionic chip",
       "price": 15000000,
       "sku": "IPH14PRO128",
-      "stock_quantity": 50,
+      "stockQuantity": 50,
       "weight": 0.206,
       "slug": "iphone-14-pro",
       "status": "active",
       "seller": {
         "id": 2,
-        "first_name": "John",
-        "last_name": "Doe"
+        "firstName": "John",
+        "lastName": "Doe"
       },
       "categories": [
         {
@@ -1006,14 +1026,14 @@ List products for authenticated users. For sellers, shows their own products. Fo
           "name": "Electronics"
         }
       ],
-      "created_at": "2024-01-15T10:30:00Z"
+      "createdAt": "2024-01-15T10:30:00Z"
     }
   ],
   "pagination": {
-    "current_page": 1,
-    "total_pages": 5,
-    "total_items": 100,
-    "items_per_page": 20
+    "currentPage": 1,
+    "totalPages": 5,
+    "totalItems": 100,
+    "itemsPerPage": 20
   }
 }
 ```
@@ -1049,10 +1069,10 @@ Create a new product. Only accessible by sellers and admins.
   "description": "Powerful laptop with M2 chip and 16GB RAM",
   "price": 25000000,
   "sku": "MBP-M2-16-512",
-  "stock_quantity": 25,
+  "stockQuantity": 25,
   "weight": 1.4,
   "dimensions": "31.26 x 22.12 x 1.55 cm",
-  "category_ids": [1, 2]
+  "categoryIds": [1, 2]
 }
 ```
 
@@ -1066,12 +1086,12 @@ Create a new product. Only accessible by sellers and admins.
   "description": "Powerful laptop with M2 chip and 16GB RAM",
   "price": 25000000,
   "sku": "MBP-M2-16-512",
-  "stock_quantity": 25,
+  "stockQuantity": 25,
   "weight": 1.4,
   "dimensions": "31.26 x 22.12 x 1.55 cm",
   "slug": "macbook-pro-m2",
   "status": "active",
-  "seller_id": 2,
+  "sellerId": 2,
   "categories": [
     {
       "id": 1,
@@ -1082,7 +1102,7 @@ Create a new product. Only accessible by sellers and admins.
       "name": "Computers"
     }
   ],
-  "created_at": "2024-01-17T14:30:00Z"
+  "createdAt": "2024-01-17T14:30:00Z"
 }
 ```
 
@@ -1144,15 +1164,15 @@ Get detailed information about a specific product by ID.
   "description": "Latest iPhone with A16 Bionic chip and amazing camera",
   "price": 15000000,
   "sku": "IPH14PRO128",
-  "stock_quantity": 50,
+  "stockQuantity": 50,
   "weight": 0.206,
   "dimensions": "147.5 x 71.5 x 7.85 mm",
   "slug": "iphone-14-pro",
   "status": "active",
   "seller": {
     "id": 2,
-    "first_name": "John",
-    "last_name": "Doe"
+    "firstName": "John",
+    "lastName": "Doe"
   },
   "categories": [
     {
@@ -1160,8 +1180,8 @@ Get detailed information about a specific product by ID.
       "name": "Electronics"
     }
   ],
-  "created_at": "2024-01-15T10:30:00Z",
-  "updated_at": "2024-01-15T10:30:00Z"
+  "createdAt": "2024-01-15T10:30:00Z",
+  "updatedAt": "2024-01-15T10:30:00Z"
 }
 ```
 
@@ -1206,8 +1226,8 @@ Update a specific product. Sellers can only update their own products, admins ca
   "name": "iPhone 14 Pro Max",
   "description": "Latest iPhone with A16 Bionic chip and larger screen",
   "price": 17000000,
-  "stock_quantity": 30,
-  "category_ids": [1]
+  "stockQuantity": 30,
+  "categoryIds": [1]
 }
 ```
 
@@ -1221,7 +1241,7 @@ Update a specific product. Sellers can only update their own products, admins ca
   "description": "Latest iPhone with A16 Bionic chip and larger screen",
   "price": 17000000,
   "sku": "IPH14PRO128",
-  "stock_quantity": 30,
+  "stockQuantity": 30,
   "weight": 0.206,
   "slug": "iphone-14-pro-max",
   "status": "active",
@@ -1231,7 +1251,7 @@ Update a specific product. Sellers can only update their own products, admins ca
       "name": "Electronics"
     }
   ],
-  "updated_at": "2024-01-17T16:45:00Z"
+  "updatedAt": "2024-01-17T16:45:00Z"
 }
 ```
 
@@ -1352,17 +1372,17 @@ List all product categories with hierarchical structure.
       "id": 1,
       "name": "Electronics",
       "description": "Electronic devices and gadgets",
-      "parent_id": null,
+      "parentId": null,
       "children": [
         {
           "id": 2,
           "name": "Smartphones",
           "description": "Mobile phones and accessories",
-          "parent_id": 1,
+          "parentId": 1,
           "children": []
         }
       ],
-      "created_at": "2024-01-10T09:00:00Z"
+      "createdAt": "2024-01-10T09:00:00Z"
     }
   ]
 }
@@ -1397,7 +1417,7 @@ Create a new product category. Only accessible by admin users.
 {
   "name": "Laptops",
   "description": "Portable computers and accessories",
-  "parent_id": 1
+  "parentId": 1
 }
 ```
 
@@ -1409,8 +1429,8 @@ Create a new product category. Only accessible by admin users.
   "id": 3,
   "name": "Laptops",
   "description": "Portable computers and accessories",
-  "parent_id": 1,
-  "created_at": "2024-01-17T10:15:00Z"
+  "parentId": 1,
+  "createdAt": "2024-01-17T10:15:00Z"
 }
 ```
 
@@ -1470,7 +1490,7 @@ Get detailed information about a specific category.
   "id": 1,
   "name": "Electronics",
   "description": "Electronic devices and gadgets",
-  "parent_id": null,
+  "parentId": null,
   "children": [
     {
       "id": 2,
@@ -1478,8 +1498,8 @@ Get detailed information about a specific category.
       "description": "Mobile phones and accessories"
     }
   ],
-  "product_count": 1250,
-  "created_at": "2024-01-10T09:00:00Z"
+  "productCount": 1250,
+  "createdAt": "2024-01-01T08:00:00Z"
 }
 ```
 
@@ -1534,8 +1554,8 @@ Update a specific category. Only accessible by admin users.
   "id": 1,
   "name": "Electronics & Gadgets",
   "description": "Electronic devices, gadgets and accessories",
-  "parent_id": null,
-  "updated_at": "2024-01-17T12:30:00Z"
+  "parentId": null,
+  "updatedAt": "2024-01-17T12:30:00Z"
 }
 ```
 
@@ -1653,7 +1673,7 @@ Get current user's cart with all items and calculated totals.
 {
   "cart": {
     "id": 1,
-    "user_id": 1,
+    "userId": 1,
     "items": [
       {
         "id": 1,
@@ -1661,21 +1681,21 @@ Get current user's cart with all items and calculated totals.
           "id": 1,
           "name": "iPhone 14 Pro",
           "price": 15000000,
-          "stock_quantity": 50,
+          "stockQuantity": 50,
           "slug": "iphone-14-pro",
-          "image_url": "https://example.com/images/iphone1.jpg"
+          "imageUrl": "https://example.com/images/iphone1.jpg"
         },
         "quantity": 2,
-        "unit_price_at_add": 15000000,
-        "total_price": 30000000,
-        "selected_options": {},
-        "created_at": "2024-01-17T10:30:00Z"
+        "unitPriceAtAdd": 15000000,
+        "totalPrice": 30000000,
+        "selectedOptions": {},
+        "createdAt": "2024-01-17T10:30:00Z"
       }
     ],
     "subtotal": 30000000,
-    "total_items": 2,
-    "created_at": "2024-01-17T09:00:00Z",
-    "updated_at": "2024-01-17T10:30:00Z"
+    "totalItems": 2,
+    "createdAt": "2024-01-17T09:00:00Z",
+    "updatedAt": "2024-01-17T10:30:00Z"
   }
 }
 ```
@@ -1710,9 +1730,9 @@ Add a product to the current user's cart or update quantity if already exists.
 
 ```json
 {
-  "product_id": 1,
+  "productId": 1,
   "quantity": 2,
-  "selected_options": {
+  "selectedOptions": {
     "color": "Space Gray",
     "storage": "128GB"
   }
@@ -1724,28 +1744,28 @@ Add a product to the current user's cart or update quantity if already exists.
 
 ```json
 {
-  "cart_item": {
+  "cartItem": {
     "id": 1,
-    "cart_id": 1,
+    "cartId": 1,
     "product": {
       "id": 1,
       "name": "iPhone 14 Pro",
       "price": 15000000,
-      "stock_quantity": 48,
+      "stockQuantity": 48,
       "slug": "iphone-14-pro"
     },
     "quantity": 2,
-    "unit_price_at_add": 15000000,
-    "total_price": 30000000,
-    "selected_options": {
+    "unitPriceAtAdd": 15000000,
+    "totalPrice": 30000000,
+    "selectedOptions": {
       "color": "Space Gray",
       "storage": "128GB"
     },
-    "created_at": "2024-01-17T10:30:00Z"
+    "createdAt": "2024-01-17T10:30:00Z"
   },
-  "cart_summary": {
+  "cartSummary": {
     "subtotal": 30000000,
-    "total_items": 2
+    "totalItems": 2
   }
 }
 ```
@@ -1819,28 +1839,28 @@ Update quantity of a specific cart item.
 
 ```json
 {
-  "cart_item": {
+  "cartItem": {
     "id": 1,
-    "cart_id": 1,
+    "cartId": 1,
     "product": {
       "id": 1,
       "name": "iPhone 14 Pro",
       "price": 15000000,
-      "stock_quantity": 47,
+      "stockQuantity": 47,
       "slug": "iphone-14-pro"
     },
     "quantity": 3,
-    "unit_price_at_add": 15000000,
-    "total_price": 45000000,
-    "selected_options": {
+    "unitPriceAtAdd": 15000000,
+    "totalPrice": 45000000,
+    "selectedOptions": {
       "color": "Space Gray",
       "storage": "128GB"
     },
-    "updated_at": "2024-01-17T11:15:00Z"
+    "updatedAt": "2024-01-17T11:15:00Z"
   },
-  "cart_summary": {
+  "cartSummary": {
     "subtotal": 45000000,
-    "total_items": 3
+    "totalItems": 3
   }
 }
 ```
@@ -1915,9 +1935,9 @@ Remove a specific item from the cart.
 ```json
 {
   "message": "Item removed from cart",
-  "cart_summary": {
+  "cartSummary": {
     "subtotal": 0,
-    "total_items": 0
+    "totalItems": 0
   }
 }
 ```
@@ -1980,21 +2000,21 @@ List all coupons. Only accessible by admin users.
       "code": "WELCOME2024",
       "type": "percent",
       "value": 10,
-      "min_order_amount": 100000,
-      "max_uses": 1000,
-      "per_user_limit": 1,
-      "start_at": "2024-01-01T00:00:00Z",
-      "expires_at": "2024-12-31T23:59:59Z",
+      "minOrderAmount": 100000,
+      "maxUses": 1000,
+      "perUserLimit": 1,
+      "startAt": "2024-01-01T00:00:00Z",
+      "expiresAt": "2024-12-31T23:59:59Z",
       "status": "active",
-      "used_count": 245,
-      "created_at": "2024-01-01T00:00:00Z"
+      "usedCount": 245,
+      "createdAt": "2024-01-01T00:00:00Z"
     }
   ],
   "pagination": {
-    "current_page": 1,
-    "total_pages": 3,
-    "total_items": 50,
-    "items_per_page": 20
+    "currentPage": 1,
+    "totalPages": 3,
+    "totalItems": 50,
+    "itemsPerPage": 20
   }
 }
 ```
@@ -2037,11 +2057,11 @@ Create a new coupon. Only accessible by admin users.
   "code": "NEWYEAR2024",
   "type": "percent",
   "value": 15,
-  "min_order_amount": 200000,
-  "max_uses": 500,
-  "per_user_limit": 1,
-  "start_at": "2024-01-01T00:00:00Z",
-  "expires_at": "2024-01-31T23:59:59Z"
+  "minOrderAmount": 200000,
+  "maxUses": 500,
+  "perUserLimit": 1,
+  "startAt": "2024-01-01T00:00:00Z",
+  "expiresAt": "2024-01-31T23:59:59Z"
 }
 ```
 
@@ -2054,14 +2074,14 @@ Create a new coupon. Only accessible by admin users.
   "code": "NEWYEAR2024",
   "type": "percent",
   "value": 15,
-  "min_order_amount": 200000,
-  "max_uses": 500,
-  "per_user_limit": 1,
-  "start_at": "2024-01-01T00:00:00Z",
-  "expires_at": "2024-01-31T23:59:59Z",
+  "minOrderAmount": 200000,
+  "maxUses": 500,
+  "perUserLimit": 1,
+  "startAt": "2024-01-01T00:00:00Z",
+  "expiresAt": "2024-01-31T23:59:59Z",
   "status": "active",
-  "used_count": 0,
-  "created_at": "2024-01-17T14:30:00Z"
+  "usedCount": 0,
+  "createdAt": "2024-01-17T14:30:00Z"
 }
 ```
 
@@ -2122,16 +2142,16 @@ Get coupon details by code to check if it's valid and available.
   "code": "WELCOME2024",
   "type": "percent",
   "value": 10,
-  "min_order_amount": 100000,
-  "max_uses": 1000,
-  "per_user_limit": 1,
-  "start_at": "2024-01-01T00:00:00Z",
-  "expires_at": "2024-12-31T23:59:59Z",
+  "minOrderAmount": 100000,
+  "maxUses": 1000,
+  "perUserLimit": 1,
+  "startAt": "2024-01-01T00:00:00Z",
+  "expiresAt": "2024-12-31T23:59:59Z",
   "status": "active",
-  "used_count": 245,
-  "remaining_uses": 755,
-  "user_usage_count": 0,
-  "is_valid": true
+  "usedCount": 245,
+  "remainingUses": 755,
+  "userUsageCount": 0,
+  "isValid": true
 }
 ```
 
@@ -2178,8 +2198,8 @@ Validate a coupon against the current cart or order summary to check discount ca
 
 ```json
 {
-  "coupon_code": "WELCOME2024",
-  "order_amount": 500000
+  "couponCode": "WELCOME2024",
+  "orderAmount": 500000
 }
 ```
 
@@ -2194,9 +2214,9 @@ Validate a coupon against the current cart or order summary to check discount ca
     "type": "percent",
     "value": 10
   },
-  "is_valid": true,
-  "discount_amount": 50000,
-  "final_amount": 450000,
+  "isValid": true,
+  "discountAmount": 50000,
+  "finalAmount": 450000,
   "message": "Coupon applied successfully"
 }
 ```
@@ -2257,10 +2277,10 @@ Create a new order from the current user's cart and initiate the checkout proces
 
 ```json
 {
-  "shipping_address_id": 2,
-  "payment_method_id": 1,
-  "coupon_code": "WELCOME2024",
-  "shipping_option": {
+  "shippingAddressId": 2,
+  "paymentMethodId": 1,
+  "couponCode": "WELCOME2024",
+  "shippingOption": {
     "courier": "jne",
     "service": "REG",
     "cost": 15000,
@@ -2276,9 +2296,9 @@ Create a new order from the current user's cart and initiate the checkout proces
 {
   "order": {
     "id": 1,
-    "order_number": "DGN-2024-001",
+    "orderNumber": "DGN-2024-001",
     "status": "new",
-    "user_id": 1,
+    "userId": 1,
     "items": [
       {
         "id": 1,
@@ -2288,30 +2308,30 @@ Create a new order from the current user's cart and initiate the checkout proces
           "sku": "IPH14PRO128"
         },
         "quantity": 2,
-        "unit_price": 15000000,
-        "discount_amount": 3000000,
-        "tax_amount": 0,
+        "unitPrice": 15000000,
+        "discountAmount": 3000000,
+        "taxAmount": 0,
         "total": 27000000
       }
     ],
     "subtotal": 30000000,
     "tax": 0,
-    "shipping_fee": 15000,
-    "discount_amount": 3000000,
+    "shippingFee": 15000,
+    "discountAmount": 3000000,
     "total": 27015000,
     "coupon": {
       "id": 1,
       "code": "WELCOME2024"
     },
-    "shipping_address": {
+    "shippingAddress": {
       "street1": "Jl. Thamrin No. 456",
       "city": "Jakarta",
       "province": "DKI Jakarta"
     },
-    "created_at": "2024-01-17T15:30:00Z"
+    "createdAt": "2024-01-17T15:30:00Z"
   },
-  "payment_url": "https://app.midtrans.com/snap/v2/vtweb/...",
-  "payment_token": "66e4fa55-fdac-4ef9-91b5-733b97d1b862"
+  "paymentUrl": "https://app.midtrans.com/snap/v2/vtweb/...",
+  "paymentToken": "66e4fa55-fdac-4ef9-91b5-733b97d1b862"
 }
 ```
 
@@ -2322,7 +2342,7 @@ Create a new order from the current user's cart and initiate the checkout proces
   "message": "Validation failed",
   "errors": [
     {
-      "field": "shipping_address_id",
+      "field": "shippingAddressId",
       "message": "Shipping address is required"
     }
   ]
@@ -2374,20 +2394,20 @@ List all orders for the current authenticated user with pagination and status fi
   "orders": [
     {
       "id": 1,
-      "order_number": "DGN-2024-001",
+      "orderNumber": "DGN-2024-001",
       "status": "paid",
       "subtotal": 30000000,
       "total": 27015000,
-      "items_count": 2,
-      "created_at": "2024-01-17T15:30:00Z",
-      "updated_at": "2024-01-17T16:00:00Z"
+      "itemsCount": 2,
+      "createdAt": "2024-01-17T15:30:00Z",
+      "updatedAt": "2024-01-17T16:00:00Z"
     }
   ],
   "pagination": {
-    "current_page": 1,
-    "total_pages": 1,
-    "total_items": 1,
-    "items_per_page": 10
+    "currentPage": 1,
+    "totalPages": 1,
+    "totalItems": 1,
+    "itemsPerPage": 10
   }
 }
 ```
@@ -2424,9 +2444,9 @@ Get detailed information about a specific order. Users can only access their own
 ```json
 {
   "id": 1,
-  "order_number": "DGN-2024-001",
+  "orderNumber": "DGN-2024-001",
   "status": "paid",
-  "user_id": 1,
+  "userId": 1,
   "items": [
     {
       "id": 1,
@@ -2434,19 +2454,19 @@ Get detailed information about a specific order. Users can only access their own
         "id": 1,
         "name": "iPhone 14 Pro",
         "sku": "IPH14PRO128",
-        "image_url": "https://example.com/images/iphone1.jpg"
+        "imageUrl": "https://example.com/images/iphone1.jpg"
       },
       "quantity": 2,
-      "unit_price": 15000000,
-      "discount_amount": 3000000,
-      "tax_amount": 0,
+      "unitPrice": 15000000,
+      "discountAmount": 3000000,
+      "taxAmount": 0,
       "total": 27000000
     }
   ],
   "subtotal": 30000000,
   "tax": 0,
-  "shipping_fee": 15000,
-  "discount_amount": 3000000,
+  "shippingFee": 15000,
+  "discountAmount": 3000000,
   "total": 27015000,
   "coupon": {
     "id": 1,
@@ -2456,22 +2476,22 @@ Get detailed information about a specific order. Users can only access their own
     "id": 1,
     "amount": 27015000,
     "status": "success",
-    "paid_at": "2024-01-17T16:00:00Z"
+    "paidAt": "2024-01-17T16:00:00Z"
   },
   "shipment": {
     "id": 1,
     "courier": "jne",
-    "tracking_number": "JNE1234567890",
-    "status": "in_transit",
-    "shipped_at": "2024-01-18T10:00:00Z"
+    "trackingNumber": "JNE1234567890",
+    "status": "inTransit",
+    "shippedAt": "2024-01-18T10:00:00Z"
   },
-  "shipping_address": {
+  "shippingAddress": {
     "street1": "Jl. Thamrin No. 456",
     "city": "Jakarta",
     "province": "DKI Jakarta"
   },
-  "created_at": "2024-01-17T15:30:00Z",
-  "updated_at": "2024-01-18T10:00:00Z"
+  "createdAt": "2024-01-17T15:30:00Z",
+  "updatedAt": "2024-01-18T10:00:00Z"
 }
 ```
 
@@ -2520,8 +2540,8 @@ Initiate payment for an order using Midtrans payment gateway.
 
 ```json
 {
-  "order_id": 1,
-  "payment_method_id": 1
+  "orderId": 1,
+  "paymentMethodId": 1
 }
 ```
 
@@ -2532,15 +2552,15 @@ Initiate payment for an order using Midtrans payment gateway.
 {
   "payment": {
     "id": 1,
-    "order_id": 1,
+    "orderId": 1,
     "amount": 27015000,
     "currency": "IDR",
     "status": "pending",
-    "created_at": "2024-01-17T15:45:00Z"
+    "createdAt": "2024-01-17T15:45:00Z"
   },
-  "payment_url": "https://app.midtrans.com/snap/v2/vtweb/...",
-  "payment_token": "66e4fa55-fdac-4ef9-91b5-733b97d1b862",
-  "expires_at": "2024-01-17T16:45:00Z"
+  "paymentUrl": "https://app.midtrans.com/snap/v2/vtweb/...",
+  "paymentToken": "66e4fa55-fdac-4ef9-91b5-733b97d1b862",
+  "expiresAt": "2024-01-17T16:45:00Z"
 }
 ```
 
@@ -2587,17 +2607,17 @@ Handle Midtrans payment notifications and update order/payment status accordingl
 
 ```json
 {
-  "transaction_time": "2024-01-17 16:00:00",
-  "transaction_status": "capture",
-  "transaction_id": "b91c16dd-d6d1-469e-9e32-9d8d4c2f8c96",
-  "status_message": "midtrans payment notification",
-  "status_code": "200",
-  "signature_key": "85b34928e75e51e1ab...",
-  "settlement_time": "2024-01-17 16:00:02",
-  "payment_type": "credit_card",
-  "order_id": "DGN-2024-001",
-  "merchant_id": "G123456789",
-  "gross_amount": "27015000.00"
+  "transactionTime": "2024-01-17 16:00:00",
+  "transactionStatus": "capture",
+  "transactionId": "b91c16dd-d6d1-469e-9e32-9d8d4c2f8c96",
+  "statusMessage": "midtrans payment notification",
+  "statusCode": "200",
+  "signatureKey": "85b34928e75e51e1ab...",
+  "settlementTime": "2024-01-17 16:00:02",
+  "paymentType": "creditCard",
+  "orderId": "DGN-2024-001",
+  "merchantId": "G123456789",
+  "grossAmount": "27015000.00"
 }
 ```
 
@@ -2650,27 +2670,27 @@ Get shipment status and tracking information for a specific order.
 {
   "shipment": {
     "id": 1,
-    "order_id": 1,
+    "orderId": 1,
     "courier": "jne",
-    "tracking_number": "JNE1234567890",
-    "status": "in_transit",
-    "shipped_at": "2024-01-18T10:00:00Z",
-    "estimated_delivery": "2024-01-20T17:00:00Z",
+    "trackingNumber": "JNE1234567890",
+    "status": "inTransit",
+    "shippedAt": "2024-01-18T10:00:00Z",
+    "estimatedDelivery": "2024-01-20T17:00:00Z",
     "address": {
       "street1": "Jl. Thamrin No. 456",
       "city": "Jakarta",
       "province": "DKI Jakarta",
-      "postal_code": "12346"
+      "postalCode": "12346"
     },
-    "tracking_history": [
+    "trackingHistory": [
       {
         "timestamp": "2024-01-18T10:00:00Z",
-        "status": "picked_up",
+        "status": "pickedUp",
         "description": "Package picked up from seller"
       },
       {
         "timestamp": "2024-01-18T14:30:00Z",
-        "status": "in_transit",
+        "status": "inTransit",
         "description": "Package in transit to destination city"
       }
     ]
@@ -2727,7 +2747,7 @@ List all reviews for a specific product with pagination and rating filtering.
 - `page` (optional): Page number (default: 1)
 - `limit` (optional): Items per page (default: 10, max: 50)
 - `rating` (optional): Filter by rating (1-5)
-- `sort` (optional): Sort by (newest, oldest, rating_high, rating_low)
+- `sort` (optional): Sort by (newest, oldest, ratingHigh, ratingLow)
 
 **Response Body**  
 **(200 - Success)**
@@ -2739,8 +2759,8 @@ List all reviews for a specific product with pagination and rating filtering.
       "id": 1,
       "user": {
         "id": 1,
-        "first_name": "John",
-        "last_name": "D."
+        "firstName": "John",
+        "lastName": "D."
       },
       "rating": 5,
       "comment": "Excellent product! Fast delivery and great quality.",
@@ -2751,19 +2771,19 @@ List all reviews for a specific product with pagination and rating filtering.
           "url": "https://example.com/reviews/img1.jpg"
         }
       ],
-      "created_at": "2024-01-20T14:30:00Z"
+      "createdAt": "2024-01-20T14:30:00Z"
     }
   ],
   "pagination": {
-    "current_page": 1,
-    "total_pages": 5,
-    "total_items": 50,
-    "items_per_page": 10
+    "currentPage": 1,
+    "totalPages": 5,
+    "totalItems": 50,
+    "itemsPerPage": 10
   },
-  "rating_summary": {
-    "average_rating": 4.6,
-    "total_reviews": 50,
-    "rating_distribution": {
+  "ratingSummary": {
+    "averageRating": 4.6,
+    "totalReviews": 50,
+    "ratingDistribution": {
       "5": 30,
       "4": 15,
       "3": 3,
@@ -2817,8 +2837,8 @@ media[]: (file) image2.jpg
 {
   "review": {
     "id": 1,
-    "user_id": 1,
-    "product_id": 1,
+    "userId": 1,
+    "productId": 1,
     "rating": 5,
     "comment": "Excellent product! Fast delivery and great quality.",
     "media": [
@@ -2833,7 +2853,7 @@ media[]: (file) image2.jpg
         "url": "https://example.com/reviews/img2.jpg"
       }
     ],
-    "created_at": "2024-01-20T14:30:00Z"
+    "createdAt": "2024-01-20T14:30:00Z"
   }
 }
 ```
@@ -2908,7 +2928,7 @@ Get current user's wishlist with all saved products.
 {
   "wishlist": {
     "id": 1,
-    "user_id": 1,
+    "userId": 1,
     "items": [
       {
         "id": 1,
@@ -2916,16 +2936,16 @@ Get current user's wishlist with all saved products.
           "id": 1,
           "name": "iPhone 14 Pro",
           "price": 15000000,
-          "stock_quantity": 50,
+          "stockQuantity": 50,
           "slug": "iphone-14-pro",
-          "image_url": "https://example.com/images/iphone1.jpg",
+          "imageUrl": "https://example.com/images/iphone1.jpg",
           "rating": 4.8
         },
-        "added_at": "2024-01-15T10:30:00Z"
+        "addedAt": "2024-01-15T10:30:00Z"
       }
     ],
-    "total_items": 1,
-    "created_at": "2024-01-15T09:00:00Z"
+    "totalItems": 1,
+    "createdAt": "2024-01-15T09:00:00Z"
   }
 }
 ```
@@ -2960,7 +2980,7 @@ Add a product to the current user's wishlist.
 
 ```json
 {
-  "product_id": 1
+  "productId": 1
 }
 ```
 
@@ -2969,17 +2989,17 @@ Add a product to the current user's wishlist.
 
 ```json
 {
-  "wishlist_item": {
+  "wishlistItem": {
     "id": 1,
-    "wishlist_id": 1,
+    "wishlistId": 1,
     "product": {
       "id": 1,
       "name": "iPhone 14 Pro",
       "price": 15000000,
       "slug": "iphone-14-pro",
-      "image_url": "https://example.com/images/iphone1.jpg"
+      "imageUrl": "https://example.com/images/iphone1.jpg"
     },
-    "added_at": "2024-01-17T10:30:00Z"
+    "addedAt": "2024-01-17T10:30:00Z"
   }
 }
 ```
@@ -3080,7 +3100,7 @@ List all notifications for the current authenticated user.
 
 - `page` (optional): Page number (default: 1)
 - `limit` (optional): Items per page (default: 20, max: 100)
-- `is_read` (optional): Filter by read status (true/false)
+- `isRead` (optional): Filter by read status (true/false)
 - `type` (optional): Filter by notification type
 
 **Response Body**  
@@ -3091,24 +3111,24 @@ List all notifications for the current authenticated user.
   "notifications": [
     {
       "id": 1,
-      "type": "order_status_update",
+      "type": "orderStatusUpdate",
       "text": "Your order DGN-2024-001 has been shipped",
       "payload": {
-        "order_id": 1,
-        "order_number": "DGN-2024-001",
+        "orderId": 1,
+        "orderNumber": "DGN-2024-001",
         "status": "shipped"
       },
-      "is_read": false,
-      "created_at": "2024-01-18T10:00:00Z"
+      "isRead": false,
+      "createdAt": "2024-01-18T10:00:00Z"
     }
   ],
   "pagination": {
-    "current_page": 1,
-    "total_pages": 2,
-    "total_items": 25,
-    "items_per_page": 20
+    "currentPage": 1,
+    "totalPages": 2,
+    "totalItems": 25,
+    "itemsPerPage": 20
   },
-  "unread_count": 5
+  "unreadCount": 5
 }
 ```
 
@@ -3145,10 +3165,10 @@ Mark a specific notification as read.
 {
   "notification": {
     "id": 1,
-    "type": "order_status_update",
+    "type": "orderStatusUpdate",
     "text": "Your order DGN-2024-001 has been shipped",
-    "is_read": true,
-    "updated_at": "2024-01-18T15:30:00Z"
+    "isRead": true,
+    "updatedAt": "2024-01-18T15:30:00Z"
   }
 }
 ```
@@ -3197,7 +3217,7 @@ Health check endpoint to verify API service status and database connectivity.
   "services": {
     "database": "connected",
     "redis": "connected",
-    "external_apis": {
+    "externalApis": {
       "midtrans": "reachable",
       "rajaongkir": "reachable"
     }
@@ -3216,7 +3236,7 @@ Health check endpoint to verify API service status and database connectivity.
   "services": {
     "database": "disconnected",
     "redis": "connected",
-    "external_apis": {
+    "externalApis": {
       "midtrans": "unreachable",
       "rajaongkir": "reachable"
     }
