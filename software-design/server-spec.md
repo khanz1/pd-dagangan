@@ -1,15 +1,15 @@
-
 # Dagangan Backend Server Specification
 
 ## 1. Cover & Administrative
 
- **Project** : Dagangan Backend API  **Version** : 1.0.0  **Date** : 2025-06-10  **Authors** : Backend Team
+ **Project** : Dagangan Backend API  **Version** : 1.1.0  **Date** : 2025-01-20  **Authors** : Backend Team
 
  **Revision History** :
 
-| Version | Date       | Description   | Author       |
-| ------- | ---------- | ------------- | ------------ |
-| 1.0.0   | 2025-06-10 | Initial draft | Backend Team |
+| Version | Date       | Description                           | Author       |
+| ------- | ---------- | ------------------------------------- | ------------ |
+| 1.0.0   | 2025-06-10 | Initial draft                         | Backend Team |
+| 1.1.0   | 2025-01-20 | Added Service-Repository pattern      | Backend Team |
 
 ## 2. Table of Contents
 
@@ -21,7 +21,7 @@
 6. Database Design
 7. Authentication & Authorization
 8. API Design
-9. Business Logic Layer
+9. Business Logic Layer (Service-Repository Pattern)
 10. 3rd-Party Integrations
 11. Error Handling & Logging
 12. Testing Strategy
@@ -37,7 +37,7 @@
 
 ## 3. Introduction
 
- **Purpose & Scope** : This document defines the backend API for Dagangan, a scalable, secure e-commerce platform integrating payments, shipping rates, and social login. It covers architecture, database, API endpoints, integrations, and non-functional requirements.
+ **Purpose & Scope** : This document defines the backend API for Dagangan, a scalable, secure e-commerce platform integrating payments, shipping rates, and social login. The architecture follows the service-repository pattern for optimal separation of concerns, testability, and maintainability.
 
  **Target Audience** : Backend developers, QA, DevOps, and security teams.
 
@@ -48,57 +48,97 @@
 * **ORM** : Object-Relational Mapping
 * **PWA** : Progressive Web App
 * **PG** : PostgreSQL
+* **Repository Pattern** : Data access abstraction layer
+* **Service Layer** : Business logic layer
 
 ## 5. Architecture Overview
 
-* **Context** : Single backend service with Express, exposing RESTful endpoints to a React/PWA frontend.
+* **Context** : Single backend service with Express, exposing RESTful endpoints to a React/PWA frontend following the service-repository pattern.
+* **Layers** :
+  * **Presentation Layer** : Controllers (HTTP request/response handling)
+  * **Business Logic Layer** : Services (business rules and orchestration)
+  * **Data Access Layer** : Repositories (database operations abstraction)
+  * **Data Layer** : PostgreSQL with Sequelize ORM
 * **Components** :
-* **API Server** : Node.js + Express
-* **DB** : PostgreSQL (Sequelize ORM)
-* **Cache** : Redis (session, rate-limiting)
-* **Load Balancer** : Kubernetes or NGINX
-* **CI/CD** : GitHub Actions
+  * **API Server** : Node.js + Express
+  * **DB** : PostgreSQL (Sequelize ORM)
+  * **Cache** : Redis (session, rate-limiting)
+  * **Load Balancer** : Kubernetes or NGINX
+  * **CI/CD** : GitHub Actions
 
 ## 6. Tech Stack
 
-| Layer     | Technology                 |
-| --------- | -------------------------- |
-| Language  | TypeScript                 |
-| Runtime   | Node.js (v18+)             |
-| Framework | Express                    |
-| Database  | PostgreSQL + Sequelize     |
-| Auth      | JWT, bcrypt, Google OAuth2 |
-| Testing   | Jest, supertest            |
-| Docs      | Swagger (OpenAPI)          |
-| Logging   | Pino, pino-pretty          |
-| Payment   | Midtrans API               |
-| Shipping  | RajaOngkir API             |
-| Container | Docker                     |
+| Layer      | Technology                 |
+| ---------- | -------------------------- |
+| Language   | TypeScript                 |
+| Runtime    | Node.js (v18+)             |
+| Framework  | Express                    |
+| Database   | PostgreSQL + Sequelize     |
+| Validation | Zod (in controllers)       |
+| Auth       | JWT, bcrypt, Google OAuth2 |
+| Testing    | Jest, supertest            |
+| Docs       | Swagger (OpenAPI)          |
+| Logging    | Winston                    |
+| Payment    | Midtrans API               |
+| Shipping   | RajaOngkir API             |
+| Container  | Docker                     |
 
-## 7. Folder Structure & Coding Conventions Folder Structure & Coding Conventions
+## 7. Folder Structure & Coding Conventions
 
 ```
 src/
-  controllers/        -- shared controllers for all routes
-  services/           -- business logic layer
+  controllers/        -- HTTP request/response handling + validation
+  services/           -- Business logic layer
+  repositories/       -- Data access layer (database operations)
   models/             -- Sequelize models
   routes/             -- Express route definitions
-  middleware/         -- auth, error handlers
+  middleware/         -- auth, error handlers (no validation)
+  types/              -- TypeScript type definitions
+  validators/         -- Zod validation schemas
   utils/
-    logger.ts         -- Pino logger setup (with pino-pretty)
+    logger.ts         -- Winston logger setup
   config/
     index.ts          -- configuration loader
   tests/
     unit/             -- Jest unit tests
     integration/      -- supertest integration tests
-  logs/               -- application log files (rotated via pino)
+  logs/               -- application log files
   index.ts            -- application entry point
+```
+
+### **Architectural Layers**
+
+#### **Controllers Layer**
+- Handle HTTP requests and responses
+- Perform input validation using Zod schemas
+- Call appropriate services
+- Transform service responses to HTTP responses
+- Handle errors and status codes
+
+#### **Services Layer**
+- Contain business logic and rules
+- Orchestrate operations across multiple repositories
+- Handle transactions and complex business workflows
+- Transform data between layers
+- Call external APIs when needed
+
+#### **Repositories Layer**
+- Abstract database operations
+- Provide clean interfaces for data access
+- Handle Sequelize queries and relationships
+- Implement caching strategies
+- Ensure data consistency
+
+### **Data Flow Pattern**
+```
+HTTP Request → Controller → Service → Repository → Database
+HTTP Response ← Controller ← Service ← Repository ← Database
 ```
 
 * **Naming** : camelCase for variables, PascalCase for classes.
 * **Linting** : ESLint + Prettier rules enforced in CI.
 
-## 8. Database Design## 8. Database Design
+## 8. Database Design
 
 * See ERD in Appendix A.
 * **Migrations** : Sequelize CLI; each table has `created_at` and `updated_at`.
@@ -113,6 +153,14 @@ src/
 ## 10. API Design
 
  **Base URL** : `/api/v1`
+
+### **Request/Response Flow**
+1. **Route** receives request and applies auth middleware
+2. **Controller** validates input with Zod schemas
+3. **Controller** calls appropriate **Service** method
+4. **Service** implements business logic and calls **Repository** methods
+5. **Repository** performs database operations
+6. **Response** flows back through the layers
 
 ### Public Endpoints (no authentication)
 
@@ -240,10 +288,69 @@ src/
 | GET    | /healthz | Health check endpoint    |
 | GET    | /docs    | Swagger UI documentation |
 
-## 11. Business Logic Layer. Business Logic Layer
+## 11. Business Logic Layer (Service-Repository Pattern)
 
-* Controllers call **services** for DB transactions.
-* **Transactions** : Sequelize `transaction` for atomic operations (checkout).
+### **Service Layer Responsibilities**
+- Implement business rules and validation
+- Orchestrate complex operations across multiple repositories
+- Handle transactions for atomic operations
+- Transform data between presentation and data layers
+- Integrate with external services (payments, shipping)
+- Implement caching strategies
+
+### **Repository Layer Responsibilities**
+- Abstract database operations from business logic
+- Provide clean, testable interfaces for data access
+- Handle Sequelize ORM interactions
+- Implement query optimization
+- Manage relationships and eager loading
+- Handle database-specific error handling
+
+### **Example Architecture**
+
+```typescript
+// Controller
+class UserController {
+  static async getProfile(req: AuthenticatedRequest, res: Response) {
+    // 1. Validate input
+    const userId = validateUserId(req.user.userId);
+    
+    // 2. Call service
+    const user = await UserService.getUserProfile(userId);
+    
+    // 3. Return response
+    res.json(user);
+  }
+}
+
+// Service
+class UserService {
+  static async getUserProfile(userId: number) {
+    // Business logic
+    const user = await UserRepository.findByIdWithProfile(userId);
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+    
+    // Transform data
+    return this.transformUserResponse(user);
+  }
+}
+
+// Repository
+class UserRepository {
+  static async findByIdWithProfile(userId: number) {
+    return User.findByPk(userId, {
+      include: [{ model: SellerProfile, as: 'sellerProfile' }]
+    });
+  }
+}
+```
+
+### **Transaction Handling**
+- Services manage transactions for complex operations
+- Repositories accept optional transaction parameter
+- Checkout process uses transactions for atomicity
 
 ## 12. 3rd-Party Integrations
 
@@ -255,18 +362,21 @@ src/
 
 * **Middleware** : Central `errorHandler(err, req, res, next)` catches and formats errors.
 * **Error Format** : `{ code: string, message: string, details?: any }` for consistent client responses.
-* **Logging** : Pino logger (with `pino-pretty` in development) writes structured JSON logs to console and rotates files in `logs/` folder via `pino-multi-stream`.
-* **Usage** : Import `logger` from `utils/logger.ts` in controllers/services to log at appropriate levels (info, warn, error).
+* **Validation** : Handled in controllers using Zod schemas, not in route middleware.
+* **Logging** : Winston logger writes structured JSON logs to console and rotates files in `logs/` folder.
+* **Usage** : Import `logger` from `config/logger.ts` in controllers/services to log at appropriate levels (info, warn, error).
 
 ## 14. Testing Strategy
 
-* **Unit Tests** : Jest for services and utils.
+* **Unit Tests** : Jest for services, repositories, and utils.
 * **Integration Tests** : supertest on controllers using test DB.
+* **Repository Tests** : Test data access layer separately.
+* **Service Tests** : Mock repositories to test business logic.
 * **Mocks** : nock for external API stubbing.
 
 ## 15. Security Considerations
 
-* **Validation** : express-validator on all inputs.
+* **Validation** : Zod schemas in controllers for all inputs.
 * **Rate Limiting** : express-rate-limit on auth endpoints.
 * **Headers** : helmet for secure HTTP headers.
 * **CORS** : restricted origins.
@@ -274,11 +384,13 @@ src/
 ## 16. Performance & Scalability
 
 * **Performance** :
-* P95 page-load via API <200ms.
-* DB indexing on common filters.
+  * P95 page-load via API <200ms.
+  * DB indexing on common filters.
+  * Repository-level caching strategies.
 * **Scalability** :
-* Stateless server behind LB.
-* Docker containers for horizontal pods.
+  * Stateless server behind LB.
+  * Docker containers for horizontal pods.
+  * Service layer enables easy horizontal scaling.
 
 ## 17. Availability & Resilience
 
