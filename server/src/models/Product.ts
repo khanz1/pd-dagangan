@@ -7,6 +7,16 @@ import {
   ForeignKey,
   NonAttribute,
   Association,
+  BelongsToManySetAssociationsMixin,
+  BelongsToManyGetAssociationsMixin,
+  BelongsToManyAddAssociationMixin,
+  BelongsToManyAddAssociationsMixin,
+  BelongsToManyCreateAssociationMixin,
+  BelongsToManyRemoveAssociationMixin,
+  BelongsToManyRemoveAssociationsMixin,
+  BelongsToManyHasAssociationMixin,
+  BelongsToManyHasAssociationsMixin,
+  BelongsToManyCountAssociationsMixin,
 } from 'sequelize';
 import { sequelize } from '@/config/database';
 import { ProductStatus } from '@/types';
@@ -36,6 +46,18 @@ export class Product extends Model<InferAttributes<Product>, InferCreationAttrib
   declare wishlistItems?: NonAttribute<any[]>;
   declare reviews?: NonAttribute<any[]>;
   declare inventoryLogs?: NonAttribute<any[]>;
+
+  // Category association methods
+  declare getCategories: BelongsToManyGetAssociationsMixin<Category>;
+  declare setCategories: BelongsToManySetAssociationsMixin<Category, number>;
+  declare addCategory: BelongsToManyAddAssociationMixin<Category, number>;
+  declare addCategories: BelongsToManyAddAssociationsMixin<Category, number>;
+  declare createCategory: BelongsToManyCreateAssociationMixin<Category>;
+  declare removeCategory: BelongsToManyRemoveAssociationMixin<Category, number>;
+  declare removeCategories: BelongsToManyRemoveAssociationsMixin<Category, number>;
+  declare hasCategory: BelongsToManyHasAssociationMixin<Category, number>;
+  declare hasCategories: BelongsToManyHasAssociationsMixin<Category, number>;
+  declare countCategories: BelongsToManyCountAssociationsMixin;
 
   // Association declarations
   declare static associations: {
@@ -179,4 +201,4 @@ Product.init(
       },
     ],
   }
-); 
+);

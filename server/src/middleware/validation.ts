@@ -47,7 +47,7 @@ export class ValidationMiddleware {
         if (error instanceof z.ZodError) {
           const validationErrors = error.errors.map(err => ({
             field: err.path.join('.'),
-            message: err.message
+            message: err.message,
           }));
           next(new ValidationError(validationErrors, 'Validation failed'));
         } else {
@@ -68,7 +68,7 @@ export function validateBody(schema: ZodSchema) {
       if (!result.success) {
         const validationErrors = result.error.errors.map(err => ({
           field: err.path.join('.'),
-          message: err.message
+          message: err.message,
         }));
         throw new ValidationError(validationErrors, 'Validation failed');
       }
@@ -87,7 +87,7 @@ export function validateQuery(schema: ZodSchema) {
       if (!result.success) {
         const validationErrors = result.error.errors.map(err => ({
           field: err.path.join('.'),
-          message: err.message
+          message: err.message,
         }));
         throw new ValidationError(validationErrors, 'Validation failed');
       }
@@ -106,7 +106,7 @@ export function validateParams(schema: ZodSchema) {
       if (!result.success) {
         const validationErrors = result.error.errors.map(err => ({
           field: err.path.join('.'),
-          message: err.message
+          message: err.message,
         }));
         throw new ValidationError(validationErrors, 'Validation failed');
       }
@@ -118,33 +118,59 @@ export function validateParams(schema: ZodSchema) {
   };
 }
 
+/**
+ * Helper function to validate input data synchronously
+ * Used for manual validation in controllers
+ */
+export function validateInput<TOutput = any, TInput = any>(
+  schema: ZodSchema<TOutput, any, TInput>,
+  data: TInput
+): TOutput {
+  const result = schema.safeParse(data);
+  if (!result.success) {
+    const validationErrors = result.error.errors.map(err => ({
+      field: err.path.join('.'),
+      message: err.message,
+    }));
+    throw new ValidationError(validationErrors, 'Validation failed');
+  }
+  return result.data;
+}
+
 // Common validation schemas
 export const CommonSchemas = {
   // ID parameter validation
   idParam: z.object({
-    id: z.string().transform((val) => {
+    id: z.string().transform(val => {
       const num = parseInt(val);
       if (isNaN(num) || num <= 0) {
         throw new Error('ID must be a positive number');
       }
       return num;
-    })
+    }),
   }),
 
   // Pagination query validation
   paginationQuery: z.object({
-    page: z.string().optional().transform((val) => val ? parseInt(val) : 1),
-    limit: z.string().optional().transform((val) => {
-      const num = val ? parseInt(val) : 20;
-      return Math.min(Math.max(num, 1), 100); // Between 1 and 100
-    })
+    page: z
+      .string()
+      .optional()
+      .transform(val => (val ? parseInt(val) : 1)),
+    limit: z
+      .string()
+      .optional()
+      .transform(val => {
+        const num = val ? parseInt(val) : 20;
+        return Math.min(Math.max(num, 1), 100); // Between 1 and 100
+      }),
   }),
 
   // Email validation
   email: z.string().email('Invalid email format'),
 
   // Password validation
-  password: z.string()
+  password: z
+    .string()
     .min(8, 'Password must be at least 8 characters')
     .max(128, 'Password must not exceed 128 characters')
     .regex(
@@ -153,8 +179,12 @@ export const CommonSchemas = {
     ),
 
   // Phone validation (Indonesian format)
-  phone: z.string()
-    .regex(/^(\+62|62|0)8[1-9][0-9]{6,9}$/, 'Phone number must be a valid Indonesian mobile number'),
+  phone: z
+    .string()
+    .regex(
+      /^(\+62|62|0)8[1-9][0-9]{6,9}$/,
+      'Phone number must be a valid Indonesian mobile number'
+    ),
 
   // Currency amount validation (in rupiah cents)
   currency: z.number().int().min(0, 'Amount must be non-negative'),
@@ -169,5 +199,5 @@ export const CommonSchemas = {
   productStatus: z.enum(['active', 'archived']),
 
   // Order status validation
-  orderStatus: z.enum(['new', 'paid', 'shipped', 'delivered', 'closed'])
-}; 
+  orderStatus: z.enum(['new', 'paid', 'shipped', 'delivered', 'closed']),
+};

@@ -13,7 +13,12 @@ export type PaymentStatus = 'pending' | 'success' | 'failed';
 export type ShipmentStatus = 'pending' | 'in_transit' | 'delivered' | 'returned';
 export type MediaType = 'image' | 'video';
 export type InventoryActionType = 'restock' | 'sale' | 'adjustment' | 'return';
-export type NotificationType = 'order_status_update' | 'payment_confirmation' | 'shipping_update' | 'promotion' | 'system_announcement';
+export type NotificationType =
+  | 'order_status_update'
+  | 'payment_confirmation'
+  | 'shipping_update'
+  | 'promotion'
+  | 'system_announcement';
 
 // Database entity interfaces
 export interface IUser {
@@ -270,16 +275,13 @@ export interface SortQuery {
 
 // JWT Payload
 export interface JwtPayload {
-  userId: number;
+  id: number;
   email: string;
   role: UserRole;
+  firstName?: string;
+  lastName?: string;
   iat?: number;
   exp?: number;
-}
-
-// Request types
-export interface AuthenticatedRequest extends Request {
-  user?: JwtPayload;
 }
 
 // Error types
@@ -293,4 +295,4 @@ export type CreateInput<T> = Pick<T, Exclude<keyof T, 'id' | 'createdAt' | 'upda
 export type UpdateInput<T> = Partial<Pick<T, Exclude<keyof T, 'id' | 'createdAt' | 'updatedAt'>>>;
 
 // Re-export error types
-export * from './errors'; 
+export * from './errors';

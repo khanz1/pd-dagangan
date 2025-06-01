@@ -1,35 +1,39 @@
-import { Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from '@/config';
 import { logger } from '@/config/logger';
 import { User } from '@/models';
-import { JwtPayload, AuthenticatedRequest, UserRole } from '@/types';
+import { JwtPayload, UserRole } from '@/types';
 import { UnauthorizedError, ForbiddenError, ErrorMessages } from '@/types/errors';
+import { BadRequestError } from '@/utils/errors';
+import { UserRepository } from '@/repositories';
 
 export class AuthMiddleware {
+  private static userRepository = new UserRepository();
+
   /**
    * Verify JWT token and attach user to request
    */
-  static async authenticate(req: AuthenticatedRequest, _res: Response, next: NextFunction): Promise<void> {
+  static async authenticate(req: Request, _res: Response, next: NextFunction): Promise<void> {
     try {
       const authHeader = req.headers.authorization;
-      
+
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
         throw new UnauthorizedError(ErrorMessages.ACCESS_TOKEN_REQUIRED);
       }
 
       const token = authHeader.substring(7); // Remove 'Bearer ' prefix
-      
+
       if (!token) {
         throw new UnauthorizedError(ErrorMessages.ACCESS_TOKEN_REQUIRED);
       }
 
       // Verify JWT token
       const decoded = jwt.verify(token, config.jwt.secret) as JwtPayload;
-      
+
       // Find user in database
       const user = await User.findByPk(decoded.userId, {
-        attributes: { exclude: ['passwordHash'] }
+        attributes: { exclude: ['passwordHash'] },
       });
 
       if (!user) {
@@ -44,7 +48,7 @@ export class AuthMiddleware {
       req.user = {
         userId: user.id,
         email: user.email,
-        role: user.role
+        role: user.role,
       };
 
       next();
@@ -56,17 +60,17 @@ export class AuthMiddleware {
   /**
    * Optional authentication - doesn't fail if no token provided
    */
-  static async optionalAuth(req: AuthenticatedRequest, _res: Response, next: NextFunction): Promise<void> {
+  static async optionalAuth(req: Request, _res: Response, next: NextFunction): Promise<void> {
     try {
       const authHeader = req.headers.authorization;
-      
+
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
         next();
         return;
       }
 
       const token = authHeader.substring(7);
-      
+
       if (!token) {
         next();
         return;
@@ -74,17 +78,17 @@ export class AuthMiddleware {
 
       // Verify JWT token
       const decoded = jwt.verify(token, config.jwt.secret) as JwtPayload;
-      
+
       // Find user in database
       const user = await User.findByPk(decoded.userId, {
-        attributes: { exclude: ['passwordHash'] }
+        attributes: { exclude: ['passwordHash'] },
       });
 
       if (user && user.status === 'active') {
         req.user = {
           userId: user.id,
           email: user.email,
-          role: user.role
+          role: user.role,
         };
       }
 
@@ -100,14 +104,14 @@ export class AuthMiddleware {
    * Require specific role(s) - must be used after authenticate
    */
   static requireRole(allowedRoles: UserRole | UserRole[]) {
-    return (req: AuthenticatedRequest, _res: Response, next: NextFunction): void => {
+    return (req: Request, _res: Response, next: NextFunction): void => {
       try {
         if (!req.user) {
           throw new UnauthorizedError(ErrorMessages.ACCESS_TOKEN_REQUIRED);
         }
 
         const roles = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
-        
+
         // Admin can access everything
         if (req.user.role === 'admin' || roles.includes(req.user.role)) {
           next();
@@ -124,4 +128,4 @@ export class AuthMiddleware {
 
 // Export individual functions for testing convenience
 export const authenticate = AuthMiddleware.authenticate;
-export const requireRole = AuthMiddleware.requireRole; 
+export const requireRole = AuthMiddleware.requireRole;

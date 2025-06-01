@@ -20,6 +20,7 @@ export class WishlistItem extends Model<
   declare wishlistId: ForeignKey<Wishlist['id']>;
   declare productId: ForeignKey<Product['id']>;
   declare addedAt: CreationOptional<Date>;
+  declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
   // Associations
@@ -65,6 +66,11 @@ WishlistItem.init(
       allowNull: false,
       field: 'added_at',
     },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      field: 'added_at',
+    },
     updatedAt: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -90,4 +96,4 @@ WishlistItem.init(
       },
     ],
   }
-); 
+);
